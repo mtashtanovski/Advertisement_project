@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block title %}Главная{% endblock %}
+{% block navbar %}{% endblock navbar %}
 
-{% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'adverts:adverts_create' %}">Создать объявление</a>
-    </li>
-{% endblock navbar %}
 {% block content %}
     <h1 class="text-center text-uppercase fw-bold fst-italic mb-5 mt-3">Список Объявлений</h1>
     {% include 'partials/search.html' %}
@@ -14,7 +12,7 @@
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title fw-bolder">{{ adverts.title }}</h5>
-{#                    <p class="fst-italic"><a href="{% url "adverts:adverts_detail" course.pk %}">Подробнее...</a></p>#}
+                    <p class="fst-italic"><a href="{% url "adverts:moderated_adverts" course.pk %}">Подробнее...</a></p>
                 </div>
             </div>
         {% endfor %}
@@ -22,4 +20,4 @@
      {% if is_paginated %}
             {% include 'partials/pagination.html' %}
         {% endif %}
-{% endblock %}
+{% endblock content %}

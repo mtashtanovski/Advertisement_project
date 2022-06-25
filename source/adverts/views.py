@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import (
     ListView,
-    CreateView,
+    CreateView, DetailView,
 )
 
 from adverts.forms import SearchForm, AdvertsForm
@@ -54,3 +54,12 @@ class AdvertsCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class ModeratedAdvertsDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'moderated_advert_detail.html'
+    model = Adverts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
