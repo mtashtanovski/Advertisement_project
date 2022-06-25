@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Профиль {{ user.pk }}{% endblock title %}
+
+{% block nav %}
+{#    {% if user_object == user %}#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{% url 'accounts:update_user' %}">Обновить профиль</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{% url 'accounts:change_password' %}">Изменить пароль</a>#}
+{#        </li>#}
+{#    {% endif %}#}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Профиль пользователя {{ user_object.username }}</h2>
+    </div>
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-lg-6">
+                <h5 class="display-5 fw-bold lh-1 mb-3">@{{ user_object.username }}</h5>
+                <p><strong>Номер телефона:</strong> {{ user_object.profile.phone_number|default:"Не указана"}}</p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
