@@ -1,7 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import ListView
+from django.views.generic import (
+    ListView,
+    CreateView,
+)
 
-from adverts.forms import SearchForm
+from adverts.forms import SearchForm, AdvertsForm
 from adverts.models import Adverts
 
 
@@ -40,3 +44,13 @@ class AdvertsListView(ListView):
     def get_search_value(self):
         if self.form.is_valid():
             return self.form.cleaned_data.get('search')
+
+
+class AdvertsCreateView(LoginRequiredMixin, CreateView):
+    model = Adverts
+    form_class = AdvertsForm
+    template_name = "create.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)

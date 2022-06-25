@@ -8,16 +8,18 @@ User = get_user_model()
 
 class Adverts(models.Model):
     title = models.CharField(
-        max_length=100
+        max_length=100,
+        verbose_name="Название"
     )
     description = models.TextField(
-        max_length=2000
+        max_length=2000,
+        verbose_name="Описание"
     )
     image = models.ImageField(
         verbose_name="Фото",
         upload_to="advert_foto/",
         null=True,
-        blank=False
+        blank=False,
     )
     price = models.DecimalField(
         max_digits=7,
@@ -57,11 +59,13 @@ class Adverts(models.Model):
         verbose_name="Статус",
         default=1,
     )
-    category = models.ManyToManyField(
+    category = models.ForeignKey(
         'adverts.Category',
         related_name='category',
+        on_delete=models.PROTECT,
         blank=True,
-        verbose_name="Тип",
+        verbose_name="Категория",
+        default=1,
     )
 
     def __str__(self):

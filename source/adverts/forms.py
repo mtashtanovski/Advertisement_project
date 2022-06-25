@@ -4,10 +4,12 @@ from adverts.models import Adverts
 
 
 class AdvertsForm(forms.ModelForm):
-
     class Meta:
         model = Adverts
-        fields = ['title', ]
+        fields = ['title', 'description', 'image', 'price', 'category']
+        widget = {
+            'category': forms.ChoiceField()
+        }
 
 
 class SearchForm(forms.Form):
