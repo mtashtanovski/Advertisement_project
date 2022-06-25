@@ -1,8 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     ListView,
-    CreateView, DetailView,
+    CreateView,
+    DetailView,
+    UpdateView,
+    DeleteView,
 )
 
 from adverts.forms import SearchForm, AdvertsForm
@@ -57,9 +61,55 @@ class AdvertsCreateView(LoginRequiredMixin, CreateView):
 
 
 class ModeratedAdvertsDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'moderated_advert_detail.html'
+    template_name = 'moderated_adverts_detail.html'
     model = Adverts
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class AdvertsDetailView(PermissionRequiredMixin, DetailView):
+    template_name = 'adverts_detail.html'
+    model = Adverts
+    permission_required = 'adverts.view_adverts'
+
+    def has_permission(self):
+        return (
+            super().has_permission() and
+            self.get_object().author == self.request.user
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class AdvertsEditView(PermissionRequiredMixin, UpdateView):
+    form_class = AdvertsForm
+    template_name = 'adverts_edit.html'
+    model = Adverts
+    permission_required = 'adverts.change_adverts'
+
+    def has_permission(self):
+        return (
+            super().has_permission() and
+            self.get_object().author == self.request.user
+        )
+
+    def get_success_url(self):
+        return reverse('adverts:new_adverts_detail', kwargs={'pk': self.object.pk})
+
+
+class AdvertsDeleteView(PermissionRequiredMixin, DeleteView):
+    template_name = 'adverts_delete.html'
+    model = Adverts
+    context_object_name = 'adverts'
+    success_url = reverse_lazy('adverts:index')
+    permission_required = 'adverts.delete_adverts'
+
+    def has_permission(self):
+        return (
+                super().has_permission() and
+                self.get_object().author == self.request.user
+        )

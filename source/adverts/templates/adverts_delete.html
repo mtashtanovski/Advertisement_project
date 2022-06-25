@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Объявление {{ adverts.pk }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST">
+        {% csrf_token %}
+            <h2> Действительно ли вы хотите удалить {{ adverts.title }} ? </h2>
+        {% include 'partials/form.html' with button_text='Удалить' %}
+        </form>
+        <a class="btn btn-primary mb-3" href="{% url "adverts:adverts_detail" adverts.pk %}">Отмена</a>
+    </div>
+
+{% endblock %}

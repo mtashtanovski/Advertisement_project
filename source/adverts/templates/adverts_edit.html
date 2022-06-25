@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Объявление {{ adverts.pk }}{% endblock %}
+
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'adverts:moderated_adverts_detail' adverts.pk %}">Вернуться к объявлению</a>
+    </li>
+{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <h2>Редактирование объявления</h2>
+    </div>
+
+    <div class="container">
+        <form class="row g-3" method="post">
+            {% include 'partials/form.html' with button_txt="Изменить" %}
+        </form>
+    </div>
+
+{% endblock %}
