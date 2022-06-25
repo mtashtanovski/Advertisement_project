@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     ListView,
@@ -56,17 +57,10 @@ class AdvertsCreateView(LoginRequiredMixin, CreateView):
     template_name = "create.html"
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-
-class ModeratedAdvertsDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'moderated_adverts_detail.html'
-    model = Adverts
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+        adverts = form.save(commit=False)
+        adverts.author = self.request.user
+        adverts.save()
+        return redirect('adverts:adverts_detail', pk=adverts.pk)
 
 
 class AdvertsDetailView(PermissionRequiredMixin, DetailView):
@@ -76,8 +70,8 @@ class AdvertsDetailView(PermissionRequiredMixin, DetailView):
 
     def has_permission(self):
         return (
-            super().has_permission() and
-            self.get_object().author == self.request.user
+                super().has_permission() and
+                self.get_object().author == self.request.user
         )
 
     def get_context_data(self, **kwargs):
@@ -93,8 +87,8 @@ class AdvertsEditView(PermissionRequiredMixin, UpdateView):
 
     def has_permission(self):
         return (
-            super().has_permission() and
-            self.get_object().author == self.request.user
+                super().has_permission() and
+                self.get_object().author == self.request.user
         )
 
     def get_success_url(self):

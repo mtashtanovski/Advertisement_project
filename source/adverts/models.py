@@ -19,13 +19,13 @@ class Adverts(models.Model):
         verbose_name="Фото",
         upload_to="advert_foto/",
         null=True,
-        blank=False,
+        blank=True,
     )
     price = models.DecimalField(
         max_digits=7,
         decimal_places=2,
         null=True,
-        blank=False,
+        blank=True,
         verbose_name='Цена',
         validators=(MinValueValidator(0),)
     )
@@ -78,10 +78,10 @@ class Adverts(models.Model):
 
 
 class Status(models.Model):
-    title = models.CharField(max_length=32, null=False, blank=False)
+    title = models.CharField(max_length=32, null=False, blank=False, verbose_name="Название")
 
     def __str__(self):
-        return f"{self.status}"
+        return f"{self.title}"
 
     class Meta:
         db_table = 'statuses'
@@ -90,10 +90,10 @@ class Status(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=32, null=False, blank=False)
+    title = models.CharField(max_length=32, null=False, blank=False, verbose_name="Название")
 
     def __str__(self):
-        return f"{self.category}"
+        return f"{self.title}"
 
     class Meta:
         db_table = 'categories'
